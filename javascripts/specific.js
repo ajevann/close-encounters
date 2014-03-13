@@ -10,8 +10,7 @@ $(document).ready(function() {
 	}(window));
 
 	var context = new webkitAudioContext(),
-		oscillator = context.createOscillator(),
-	    gainNode = context.createGainNode();
+		oscillator = context.createOscillator();
 
 	var lastNotes = [];
 	var themeNotes = ["392", "440", "349", "175", "262"];
@@ -65,16 +64,11 @@ $(document).ready(function() {
     	oscillator.disconnect(); 
 		oscillator = context.createOscillator();
 
-		oscillator.connect(gainNode);
-		gainNode.connect(context.destination);
-
-		gainNode.gain.value = 0;
-
 	    oscillator.type = 0;
 	    oscillator.frequency.value = note.attr("id") * 2;
 	    oscillator.connect(context.destination);
 
-	    oscillator.noteOn && oscillator.noteOn(0); // this method doesn't seem to exist, though it's in the docs?
+	    oscillator.noteOn && oscillator.noteOn(0); // turns on the sound. this method doesn't seem to exist, though it's in the docs?
 
 		setTimeout(function() {
 	    	oscillator.disconnect(); 

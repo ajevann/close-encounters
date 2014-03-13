@@ -9,8 +9,9 @@ $(document).ready(function() {
 		}
 	}(window));
 
-	var context = new webkitAudioContext();
-	var oscillator = context.createOscillator();
+	var context = new webkitAudioContext(),
+		oscillator = context.createOscillator(),
+	    gainNode = context.createGainNode();
 
 	var lastNotes = [];
 	var themeNotes = ["392", "440", "349", "175", "262"];
@@ -35,9 +36,7 @@ $(document).ready(function() {
 
 	$(".note").click(function() { 
 
-		console.log(notes);
-
-		startShow();
+		//startShow();
 
 		push($(this));
 
@@ -49,8 +48,8 @@ $(document).ready(function() {
 				animateTheme(750);
 		}, 2000);	
 
-		console.log(themeNotes);
-		console.log(lastNotes);
+		// console.log(themeNotes);
+		// console.log(lastNotes);
 	});
 
 	function push(note) {
@@ -63,15 +62,22 @@ $(document).ready(function() {
 	}
 
 	function playNote(note, interval) {
+    	oscillator.disconnect(); 
+		oscillator = context.createOscillator();
+
+		oscillator.connect(gainNode);
+		gainNode.connect(context.destination);
+
+		gainNode.gain.value = 0;
 
 	    oscillator.type = 0;
 	    oscillator.frequency.value = note.attr("id") * 2;
 	    oscillator.connect(context.destination);
+
 	    oscillator.noteOn && oscillator.noteOn(0); // this method doesn't seem to exist, though it's in the docs?
 
 		setTimeout(function() {
 	    	oscillator.disconnect(); 
-			
 			oscillator = context.createOscillator();
 	    }, interval);
 	}
@@ -90,14 +96,16 @@ $(document).ready(function() {
 	}
 
 	function startShow() {
-		for (var i = 0; i < 10; i++) {
+
+		for (var i = 0; i < 25; i++) {
+
 			var n = Math.floor((Math.random()*60));
 			var na = notes[n];
 			var nc = $("#" + na);
 
-			console.log(n + " " + na + " " + nc);
+			console.log(n + " " + na);
 
-			animateNote(nc, 100000);
+			animateNote(nc, 500);
 		}
 	}
 
@@ -107,7 +115,6 @@ $(document).ready(function() {
 		var w = 4 * q;
 
 		console.log(q);
-
 
 		playNote($("#392"), q);
 		animateNote($("#392"), q);
@@ -129,9 +136,13 @@ $(document).ready(function() {
 						animateNote($("#262"), w);
 
 						setTimeout(function() {
-							animateTheme(interval * .75);
+							if (q == 100) {
+								animateTheme(100);
+								startShow(); 
+							} 
+							else
+								animateTheme(interval * .75);
 						}, w + 100);
-
 					}, q + 100);
 				}, q + 100);
 			}, q + 100);

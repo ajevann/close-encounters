@@ -13,7 +13,7 @@ $(document).ready(function() {
 		$(this).attr("id", i);
 		$(this).attr("data-tone", Math.round(hz));
 		$(this).attr("data-color", setColor(i));
-		$(this).text(i);
+		//$(this).text(i);
 
 		notes[i++] = Math.round(hz).toString();
 		

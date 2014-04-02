@@ -62,15 +62,32 @@
 			top: 0; left: 0; bottom: 0; right: 0;
 		}
 
-		.title {  
+		.header {
+
+		}
+
+		#title {  
 			position: relative;
 			top: 0;
 			left: 0;
+			float: left;
+		}
+
+		#infobox {
+			position: relative;
+			padding: 35px;
+			float:right;
+			width:700px;
 		}
 
 		h1 {
 			color: white;
 			font-size: 14em;
+		}
+
+		p {
+			color: white;
+			font-size: 1.1em;
 		}
 
 	</style>
@@ -79,7 +96,11 @@
 <body>
 
 	<div class="content">
-	<div class="title"><h1>CE3K</h1></div>	
+	
+	<div class="header">
+		<div id="title"><h1>CE3K</h1></div>
+		<div id="infobox"><p>In the Speilberg classic, "Close Encounters of the Third Kind", the climax of the film involves a musical interaction between humans and extra-terrestials. Behind the scientists, an immense lightboard can be seen translating musical notes into colors, a theory inspired by Arnold Schoenberg. After trying to replicated the exact layout of the lightboard, I realized that the layout is based more on a aesthetically pleasing pattern rather than a mathematically correct one (as verified <a href="http://servitorludi.blogspot.com/2011/04/ce3k-board-makes-no-sense.html">here</a>). So, I did my best to recreate the one found in the film. Hit the correct sequence for a silly light show. (The notes are programmed using some javascript math and played using <a href="http://codebase.es/riffwave/">riffwave.js</a>, with some help from Rodrigo Siqueira's <a href="http://js.do/blog/sound-waves-with-javascript/">blog post</a>.</p></div>
+	</div>	
 
 	<table>
 

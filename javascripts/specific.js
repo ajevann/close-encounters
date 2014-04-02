@@ -1,31 +1,15 @@
 $(document).ready(function() {
 
-	(function init(g){
-		try {
-			audio_context = new (g.AudioContext || g.webkitAudioContext);
-			oscillator = audio_context.createOscillator();
-		} catch (e) {
-			alert('No web audio oscillator support in this browser');
-		}
-	}(window));
-
-	var context = new webkitAudioContext(),
-		oscillator = context.createOscillator();
-
 	var lastNotes = [];
 	var themeNotes = ["33", "35", "31", "50", "5"];
 
 	var notes = [];
 
 	var n = 35;
-	var m = 31;
 	var i = 0;
-	var count = 0;
 	$(".note").each(function() {
 		var hz = Math.pow(Math.pow(2, 1/12),n - 49) * 440;
-		//hz = Math.pow(Math.pow(2,1/12),m) * 440;
 
-		$(this).text(Math.round(hz) + " (" + i + ")");
 		$(this).attr("id", i);
 		$(this).attr("data-tone", Math.round(hz));
 		$(this).attr("data-color", setColor(i));
@@ -38,16 +22,11 @@ $(document).ready(function() {
 		// $(this).css("backgroundColor", "#" + color + "" + color);
 
 		n++;
-		m--;
 		if (i%24 == 0) { n = n - 21; }
 		if (i%48 == 0) { n = n - 10; }
 	});
 
 	$(".note").click(function() { 
-
-		startShow();
-
-		console.log($(this).attr("id") % 12 + "  " + Math.floor($(this).attr("id") / 12));
 
 		push($(this));
 
@@ -56,11 +35,8 @@ $(document).ready(function() {
 		
 		setTimeout(function() {
 			if (lastNotes.toString() == themeNotes.toString())
-				animateTheme(750);
+				startShow();
 		}, 2000);	
-
-		// console.log(themeNotes);
-		console.log(lastNotes);
 	});
 
 	//Source: http://js.do/blog/sound-waves-with-javascript/
@@ -131,7 +107,7 @@ $(document).ready(function() {
 	function animateNote(note, interval) {
 
 		var color = note.attr("data-color");
-		console.log(color);
+		//console.log(color);
 
 		note.animate({backgroundColor: "#" + color + " !important;"}, "slow");
 
@@ -143,11 +119,8 @@ $(document).ready(function() {
 	function startShow() {
 
 		for (var i = 0; i < 15; i++) {
-			console.log(i);
 			var n = Math.floor((Math.random()*72));
 			var na = notes[n];
-
-			console.log(n + " " + na);
 
 			animateNote($("#" + n), 500);
 		}
@@ -159,10 +132,7 @@ $(document).ready(function() {
 
 	function setColor(id)
 	{
-		//Column - %
 		var col = id % 12;
-
-		//Row - floor(/)
 		var row = Math.floor(id / 12);
 
 		var color = "";
@@ -182,10 +152,24 @@ $(document).ready(function() {
 			case 11:	color = "FF8000";		break;
 		}
 
+		var newColor = "";
 
+		for (var i = 0; i < 5; i++) {
+			var a = color.substring(i, i + 2);
 
+			switch (a) {
+				case "FF": break;
+				case "80": a = (((5 - row) * 14) + 128).toString(16); break;
+				case "00": a = ((5 - row) * 29).toString(16); break;
+			}
 
-		return color;
+			i++;
+
+			if (a == "0") a = "00";
+			newColor = newColor + "" + a;
+		}
+
+		return newColor;
 
 	}
 
